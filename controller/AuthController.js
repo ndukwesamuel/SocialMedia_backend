@@ -36,23 +36,44 @@ const register_user = async (req, res) => {
   }
 };
 
+// const login_user = async (req, res) => {
+//   try {
+//     const user = await UsersData.findOne({ email: req.body.email });
+//     !user && res.status(404).json("not found");
+//     const validPassword = await bcrypt.compare(
+//       req.body.password,
+//       user.password
+//     );
+//     !validPassword && res.status(400).json("wrong password ");
+//     res.status(200).json(user);
+//     return;
+//   } catch (error) {
+//     res.status(500).json(error);
+//     return;
+//   }
+// };
+
 const login_user = async (req, res) => {
   try {
     const user = await UsersData.findOne({ email: req.body.email });
-    !user && res.status(404).json("not found");
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    !validPassword && res.status(400).json("wrong password ");
-    res.status(200).json(user);
-    return;
+
+    if (!user) {
+      return res.status(404).json("not found");
+    } else if (user) {
+      const validPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!validPassword) {
+        return res.status(400).json("wrong password ");
+      } else {
+        return res.status(200).json(user);
+      }
+    }
   } catch (error) {
-    res.status(500).json(error);
-    return;
+    return res.status(500).json(error);
   }
 };
-
 module.exports = {
   index_page___,
   register_user,

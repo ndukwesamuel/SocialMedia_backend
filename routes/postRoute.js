@@ -4,7 +4,10 @@ const router = express.Router();
 const PostController = require("../controller/PostController");
 
 router.post("/", PostController.create_post);
-router.get("/timeline", PostController.get_timeline);
+router.get("/timeline/:userId", PostController.get_timeline);
+
+// get_user_all_post
+router.get("/profile/:username", PostController.get_user_all_post);
 
 router.put("/:id", PostController.update_post);
 router.delete("/:id", PostController.delete_post);

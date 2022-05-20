@@ -48,14 +48,30 @@ const delete_user = async (req, res) => {
 
 // get a user
 const get_user = async (req, res) => {
+  const userId = req.query.userId;
+  const username = req.query.username;
+  console.log(userId, username);
+
   try {
-    const post = await UsersData.findById(req.params.id);
-    const { password, updatedAt, ...others } = post._doc;
+    const user = userId
+      ? await UsersData.findById(userId)
+      : await UsersData.findOne({ username: username });
+    const { password, updatedAt, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
     res.status(500).json(err);
   }
 };
+
+// const get_user = async (req, res) => {
+//   try {
+//     const post = await UsersData.findById(req.params.id);
+//     const { password, updatedAt, ...others } = post._doc;
+//     res.status(200).json(others);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// };
 
 //follow a user
 const follow_user = async (req, res) => {
@@ -100,10 +116,31 @@ const Unfollow_user = async (req, res) => {
     res.status(403).json("you cant unfollow yourself");
   }
 };
+
+const get_friend = async (req, res) => {
+  try {
+    const user = await UsersData.findById(req.params.userId);
+    const friends = await Promise.all(
+      user.following.map((friendId) => {
+        return UsersData.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+    });
+    res.status(200).json(friendList);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 module.exports = {
   update_user,
   delete_user,
   get_user,
   follow_user,
   Unfollow_user,
+  get_friend,
 };
