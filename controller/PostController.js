@@ -1,4 +1,4 @@
-const { request } = require("express");
+// const { request } = require("express");
 const bcrypt = require("bcrypt");
 const PostData = require("../models/Post");
 const UsersData = require("../models/UserModel");
@@ -58,7 +58,7 @@ const like_dislike_post = async (req, res) => {
 
     if (!mainPost.likes.includes(req.body.userId)) {
       await mainPost.updateOne({ $push: { likes: req.body.userId } });
-      res.status(200).json("The post has been liked");
+      res.status(200).json("The post has been liked");  
     } else {
       await mainPost.updateOne({ $pull: { likes: req.body.userId } });
       res.status(200).json("The post has been disliked");

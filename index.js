@@ -22,9 +22,15 @@ dotenv.config();
 //   console.log("DATA CONNECTED");
 // });
 
-mongoose.connect("mongodb://localhost:27017/Social", () => {
-  //   console.log("DATA CONNECTED");
-});
+mongoose.connect(
+  "mongodb+srv://eduxl:samheart23@techstud.aby0d.mongodb.net/?retryWrites=true&w=majority",
+  () => {
+    console.log("DATA CONNECTED");
+  }
+);
+
+// mongodb+srv://<username>:<password>@techstud.aby0d.mongodb.net/?retryWrites=true&w=majority
+
 // MIDDLEWARE
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 // this is for our path to get some images from the back
